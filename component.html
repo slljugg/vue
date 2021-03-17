@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <button-conter @change="counterChange" v-for="cont of conters" :start="cont.start" :step="cont.step" :key="cont.name"></button-conter>
+    <hr>
+    <button-conter :start="8" :step="2"></button-conter>
+    <button-conter></button-conter>
+    <slider :imgs="pic"></slider>
+  </div>
+  <script src="vue.js"></script>
+  <script>
+  Vue.component('button-conter',{
+    props: {
+      start: {
+        default: 0
+      },
+      step: {
+        default:1
+      }
+    },
+    // props:['start','step'],
+    template:`
+      <span>
+        <button @click='inc'>+</button>
+          <span>{{count}}</span>
+        <button @click='dec'>-</button>
+      </span>
+    `,
+    data() {
+      return {
+        count: this.start
+      }
+    },
+    // methods: {
+    //   inc() {
+    //     this.count += this.step || 1
+    //   },
+    //   dec() {
+    //     this.count -= this.step || 1
+    //   }
+    // }
+    methods: {
+      inc() {
+        this.count += this.step
+        this.$emit('change',this.count)
+      },
+      dec() {
+        this.count -= this.step
+        this.$emit('change',this.count)
+      }
+    }
+  })
+    Vue.component('slider',{
+      props:['imgs'],
+      template:`
+        <div>
+          <div>
+            <img :src="imgs[curslider]" />
+          </div>
+          <span>正在显示{{curslider}}</span>
+          <button-conter @change="sliderChange"></button-conter>
+        </div>
+      `,
+      data() {
+        return {
+          curslider:0,
+        }
+      },
+      methods: {
+        sliderChange(cur) {
+          this.curslider = cur
+        }
+      }
+    })
+  var app = new Vue ({
+    el:'#app',
+    data: {
+      conters: [
+        {start: 5,step:3,name:'aa'},
+        {start: 10,step:-3,name:'bb'},
+        {start: 15,step:0,name:'cc'}
+      ]
+    },
+    computed: {
+      pic() {
+          return ['a.png','b.png']
+      }
+    },
+    methods: {
+      counterChange(cul) {
+        console.log(cul)
+      }
+    }
+  })
+  </script>
+</body>
+</html>

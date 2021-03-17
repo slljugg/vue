@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      font-family: consolas;
+    }
+    .string {
+      color: red;
+    }
+    .boolean {
+      color: green;
+    }
+    .number {
+      color: green;
+    }
+    .null {
+      color: red;
+    }
+    .taggle {
+      cursor: pointer;
+    }
+    .key {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <foo :level="8"></foo>
+    <hr>
+    <json :value="data"></json>
+  </div>
+  <script src="vue.js"></script>
+  <script>
+  Vue.component('foo',{
+    props:['level'],
+    template:`
+      <div>
+        foo
+        <foo v-if="level > 0" :level="level-1"></foo>
+      </div>
+    `
+  })
+
+  Vue.component('json',{
+    props:['value'],
+    template:`
+      <span class="string" v-if="typeof value == 'string' ">"{{value}}"</span>
+      <span class="number" v-else-if="typeof value == 'number' "> {{value}}</span>
+      <span class="boolean" v-else-if="typeof value == 'boolean' ">{{value}}</span>
+      <span class="null" v-else-if="value === null ">null
+
+      </span>
+      </div>
+      <span v-else-if="Array.isArray(value)"><span class="taggle" @click="show = !show">{{ show ? '-' : '+' }}</span>[
+        <div v-show="show" style="margin-left:1em">
+          <div v-for="(val,idx) in value">
+            <json :value="val"></json><span v-if="idx < length - 1">,</span>  
+          </div>
+        </div>
+        <span v-show="!show">...</span>
+      ]</span>
+      <span v-else-if="typeof value == 'object'"><span class="taggle" @click="show = !show"> {{ show ? '-' : '+' }}</span>{
+        <div v-show="show" style="margin-left:1em">
+          <div v-for="(val,key,idx) in value">
+            <span class="key">{{key}}</span>:<json :value="val"></json><span v-if="idx < length - 1">,</span>  
+          </div>
+        </div>
+        <span v-show="!show">...</span>
+      }</span>
+    `,
+    data() {
+      return {
+        length:this.value && Object.keys(this.value).length,
+        show:true,
+      }
+    }
+  })
+    
+  var app = new Vue ({
+    el:'#app',
+    data: {
+      
+      data: {
+        a:1,
+        b:2,
+        c:'foo',
+        d:null,
+        e:true,
+        f:[1,2,{x:3,y:4}]
+      },
+      data2: [1,2,3,4,5],
+      data3:'foo'
+    },
+  })
+  </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app-1">
+
+
+    <!-- <input type="checkbox" id="tom" value="tom" v-model="checkedName">
+    <label for="tom">tom</label>  
+    <input type="checkbox" id="som" value="som" v-model="checkedName">
+    <label for="som">som</label>
+    <input type="checkbox" id="dom" value="dom" v-model="checkedName">
+    <label for="dom">dom</label>
+    <br>
+    <span>checked Names:{{ checkedName }}</span>  -->
+
+
+    <!-- <input type="radio" id="som" value="som" v-model="picked">
+    <label for="som">som</label>
+    <input type="radio" id="dom" value="dom" v-model="picked">
+    <label for="dom">dom</label>
+    <br>
+    <span>checked Names:  {{ picked }}</span> -->
+
+
+    <!-- <select v-model="selected" multiple>
+      <option disabled value="">selectEdion</option>
+      <option>a</option>
+      <option>b</option>  
+      <option>c</option>
+    </select>
+    <span>checked Names:  {{ selected }}</span> --> 
+
+
+    <!-- <select v-model="selecttion" multiple>
+      <option v-for="option in options" v-bind:value="option.value">{{option.name}}</option>
+    </select>
+    <span>checked Names:  {{ selecttion }}</span> -->
+
+
+
+  <!-- <input v-model.lazy="msg"> -->
+
+  <!-- <input v-model.trim="msg"> -->
+  <input type="checkbox" v-model="answer" :true-value="1" :false-value="2">
+  </div>
+
+
+
+  <script src="vue.js"></script>
+  <script>
+  var app = new Vue ({
+    el:'#app-1',
+    watch: {
+      msg: function(val) {
+        console.log(val)
+      }
+    },
+    data: {
+      answer: 1,
+      msg:'',
+      checkedName:[],
+      picked:'',
+      selected:[],
+      selecttion:[],
+      options:[
+        {name:'one', value:'a'},
+        {name:'two', value:'b'},
+        {name:'three', value:'c'},
+      ]
+  }
+})
+  </script>
+</body>
+</html>

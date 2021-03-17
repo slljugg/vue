@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+     //先导入vue.js    vue的基本使用方法
+	<script src="vue.js"></script>
+</head>
+<body>
+
+
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+       //先导入vue.js
+    <script src="素材/vue.js"></script>
+  </head>
+  <body>
+      //确定vue的作用于是下面这个div id是box，显示数据的格式是 {{内容}}
+    <div id="box"><h1>{{mess}}</h1></div>
+    <script type="text/javascript">
+          //new一个Vue，并在里面操作
+      var vm=new Vue({
+              //el就是值作用范围，只能指向一个对象(可以是id选择器或者class选择器)
+        el:"#box",   //只能用逗号分隔，不能用分号，否则不执行也不报错
+              //data指向数据，{}里面的内容可以是键值对关系，下面就是通过{{mess}}获得hello world
+        data:{mess:"hello world!"},  
+              
+              //对应方法体   
+              methods:{    
+              fn1:function(参数){
+                  //方法体
+                  }
+              } 
+      })
+    </script>
+  </body>
+  
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<script src="素材/vue.js"></script>
+<body>
+	<div id="box">
+		//{{}}里面可以进行基本运算，还能用三元表达式
+		<h1>Messagee:{{mess}}</h1>
+		<h1>{{num+1}}</h1>
+		<h1>{{flag==true?"yes":"no"}}</h1>
+	</div>
+	<script type="text/javascript">
+		var vm=new Vue({
+			el:"#box",
+			data:{mess:"今天天气不错",num:"20",flag:false}
+		});
+	</script>
+</body>
+</html>
+
+
+
+  常用指令例子v-on:click
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="素材/vue.js"></script>
+</head>
+<body>
+	<div id="box">
+		<h1>{{mess}}</h1>
+		//通过点击指令调用方法v-on:click类似onclick方法，可以简写为@click
+		//若方法没有参数可以传，则可以省略括号
+		<button v-on:click="fn1">倒叙</button>
+	</div>
+	<script type="text/javascript">
+		var vm=new Vue({
+			el:"#box",
+			data:{mess:"hello"},
+			methods:{fn1:function(){
+				this.mess=this.mess.split('').reverse().join('');
+			}}
+		})
+	</script>
+</body>
+
+
+
+  v-model(双向绑定，即其中一方改变值，另一方也随之改变)
+  例子1
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<script src="素材/vue.js"></script>
+<body>
+	<div id="box">
+		//v-model指向data里面的对象，这个key的value可以为空("")，但必须要有
+		<input type="text" v-model="name" placeholder="你的名字">
+		//对应显示的数据，在上面input改变的值，会在这里实时更新改变
+		<h1>{{name}}</h1>
+	</div>
+	<script type="text/javascript">
+		var vm=new Vue({
+			el:"#box",
+			data:{name:"小明"},
+			
+		});
+	</script>
+</body>
+
+例子2
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="素材/vue.js"></script>
+</head>
+<body>
+	<div id="dox2">
+	<div id="box">
+		<form action="">
+		<p>用户名:<input type="text" v-model="lname"></p>
+		<p>密码: <input type="password" v-model="lpassword"></p>
+		<p>性别: <input type="radio" name="sex" value="男" checked="checked" v-model="sex">男 <input type="radio" name="sex" value="女" v-model="sex">女</p>
+		<p>爱好(多选按钮): <input type="checkbox" name="love" value="eat" v-model="love">吃
+			<input type="checkbox" name="love" value="play" v-model="love">玩
+			<input type="checkbox" name="love" value="sleep" v-model="love">睡觉
+			<input type="checkbox" name="love" value="song" v-model="love">唱歌</p>
+		<p><input type="reset" value="重置"></p>
+	</form>
+	</div>
+	<div >
+		<h1>表单内容如下</h1>
+		<p>用户名:{{lname}}</p>
+		<p>密码:{{lpassword}}</p>
+		<p>性别:{{sex}}</p>
+		<p>爱好(多选):{{love}}</p>
+		
+	</div>
+	</div>
+	<script type="text/javascript">
+		var vm=new Vue({
+			el:"#dox2",
+			//v-model必须要有key，但是value可以为空！
+			data:{lname:"",lpassword:"",sex:"",love:[]}
+		});
+	</script>
+</body>
+
+
+  v-show
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="素材/vue.js"></script>
+	<style type="text/css">
+ 
+	</style>
+</head>
+<body>
+	<div id="box" style="height: 100%;width: 100%">
+		<div style="height: 200px;width: 100px;margin: auto;" ><h3 @click="fn1"><img src="素材/image/pic.png" alt="">Edit Me</h3>
+			//v-show的值为true则显示，为false则隐藏，这里是用@click动态改变flag的值
+		<input type="text" v-show="flag" v-model="mess">
+		<h3>{{mess}}</h3>
+		</div>
+		
+	</div>
+ 
+	<script type="text/javascript">
+		
+ 
+		var vm=new Vue({
+			el:"#box",
+			data:{mess:"",flag:false},
+			methods:{
+				fn1:function(){
+					//每次都等于自己相反的值，效果为点击一下则
+					this.flag=!this.flag;
+				}
+			}
+		});
+	</script>
+</body>
+
+
+  v-for
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="素材/vue.js"></script>
+</head>
+<body>
+	<div id="box">
+		<ul>
+			//动态渲染格式为 (自定义数据名,下标) in 数据/集合 {{这些写的是自定义数据名}}
+			<li v-for="jingdong in arr">{{jingdong}}</li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+		var vm=new Vue({
+			el:"#box",
+			data:{arr:['全部商品分类','家用电器','手机 数码 相机','电脑 办公','家居 家具 家装','男装 女装 珠宝','鞋靴 箱包 钟表']}
+		});
+	</script>
+</body>
+
+
+
+  v-bind(绑定元素)其中一种写法
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="素材/vue.js"></script>
+	<script src="素材/jquery-1.8.3.js"></script>
+	<style>
+		.bgcL{
+			display: inline-block;
+			margin: 2px;
+			background-color:#7FFFAA;
+			color: #FFFAF0;
+		}
+		.bgcR{
+			background-color: #FFC0CB;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<ul>
+			//动态绑定属性class，里面的参数也必须为data里面存在的key
+			<li v-for="data1 in arr" @click="fn1(this)" v-bind:class=[bgcL]>{{data1}}</li>
+		</ul>
+		<p id="messP"></p>
+	</div>
+	<script type="text/javascript">
+		var vm=new Vue({
+			el:"#box",
+			//key对应的value指向css，最终网页是class=bgcL
+			data:{arr:['html','css','javaScript','vue.js'],bgcL:"bgcL"},
+			methods:{
+				fn1:function(obj){
+					$(event.target).addClass("bgcR").siblings('li').removeClass('bgcR');
+					let dd=$(event.target).html();	
+					$("#messP").text("你选择的是："+dd);
+				}
+			}
+		});
+	</script>
+</body>
+
+
+
+获得当前点击对象
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="素材/vue.js"></script>
+	<script src="素材/jquery-1.8.3.js"></script>
+</head>
+<body>
+	<div id="box">
+		<ul>
+			<li @click="fn1(obj)">李师傅<span>3000</span></li>
+			<li @click="fn1(obj)">吴师傅<span>1000</span></li>
+			<li @click="fn1(obj)">陈师傅<span>2000</span></li>
+			<li @click="fn1(obj)">赵师傅<span>2200</span></li>
+		</ul>
+		<p>Total:<span >{{dd}}</span></p>
+	</div>
+	<script type="text/javascript">
+		var vm=new Vue({
+			el:"#box",
+			data:{dd:""},
+			methods:{
+				fn1:function(e){
+					//获得当前点击对象是event.target
+					let sum=$(event.target).children('span').html();
+					if (sum===undefined) {
+						sum=$(event.target).html();
+					}
+					this.dd=sum;
+				}
+			}
+		});
+	</script>
+</body>
+
+
+
+v-for渲染填充值，并通过click动态改变样式例子
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="素材/vue.js"></script>
+	<script src="素材/jquery-1.8.3.js"></script>
+	<style>
+		#box{
+			width: 50%;
+			height: 100%;
+			border: 1px solid #000;
+			margin: auto;
+		}
+		.firstCss{
+			display: inline-block;
+			line-height:0;
+         font-size:0;
+         overflow:hidden;
+		}
+		.secondCss{
+ 
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<p>
+		<button value="1" @click="fn1(this)">封面</button>
+		<button value="2" @click="fn1(this)">带文字的</button></p>
+		<div v-for="dd in arr" v-bind:class="flag?firstCss:secondCss" ><img :src="dd.pic" ><span>{{dd.title}}</span></div>
+	</div>
+<script type="text/javascript">
+	var vm=new Vue({
+		el:"#box",
+		data:{arr:[{pic:"http://img.pconline.com.cn/images/upload/upc/tx/pcdlc/1209/06/c0/13645981_1346882786961.jpg",title:"第一本书"},
+		{pic:"http://www.86wan.com/uploads/allimg/1205/2097_120524101635_5.jpg",title:"第二本书"},
+		{pic:"http://pic.tyread.com:8082/content_T1TydTB_x71RytvJIE_320x480.jpg",title:"第三本书"},
+		{pic:"http://pic.tyread.com:8082/content_T1LydTBsxv1RytvJIE_320x480.jpg",title:"第四本书"},
+		{pic:"http://image-7.verycd.com/ea02b5db0461c1e2c0ae17fec0422cde69524%28600x%29/thumb.jpg",title:"第五本书"},
+		{pic:"http://im5.tongbu.com/websiteDev/b87ddd3b-2.jpg",title:"第六本书"}],
+		flag:true,
+		firstCss:"firstCss",
+		secondCss:"secondCss"
+		},
+		methods:{
+			fn1:function(e){
+				let num=$(event.target).val();
+				if (num==1) {
+					this.flag=true;
+				}else{
+					this.flag=false;
+				}
+			}
+		}
+	});
+</script>
+</body>
+
+</html>

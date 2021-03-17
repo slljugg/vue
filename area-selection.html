@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <select v-model="selectedProvinces">
+      <option v-for="province in provinces" :value="province">{{province.name}}</option>
+    </select>
+    <select v-model="selectedCitys">
+      <option v-for="city in selectedProvinces && selectedProvinces.child" :value="city">{{city.name}}</option>
+    </select>
+    <select v-model="selectedAreas">
+      <option v-for="area in selectedCitys && selectedCitys.child" :value="area">{{area.name}}</option>
+    </select>
+
+
+    <hr>  
+    <select v-model="selectedProvincesName">
+      <option v-for="province in provinceNames" :value="province">{{province}}</option>
+    </select>
+    <select v-model="selectedCitysName">
+      <option v-for="city in cityNames" :value="city">{{city}}</option>
+    </select>
+    <select v-model="selectedAreasName">
+      <option v-for="area in areaNames" :value="area">{{area}}</option>
+    </select>
+  </div>
+  <script src="china-city-area-zip.js"></script>
+  <script src="vue.js"></script>
+  <script>
+  var app = new Vue ({
+    el:'#app',
+    data:{
+      selectedProvincesName:'',
+      selectedCitysName:'',
+      selectedAreasName:'',
+      selectedProvinces:null,
+      selectedCitys:null,
+      selectedAreas:null,
+    },
+    computed:{
+      provinces() {
+        return china_city_area_zip
+      },
+      provinceNames() {
+        return china_city_area_zip.map(it => it.name)
+      },
+      cityNames() {
+        var selectedProvince = china_city_area_zip.find(it => it.name == this.selectedProvincesName)
+        if (selectedProvince) {
+          return selectedProvince.child.map(it => it.name)
+        } else {
+          return []
+        }
+      },
+      areaNames() {
+        var selectedProvince = china_city_area_zip.find(it => it.name == this.selectedProvincesName)
+        if (selectedProvince) {
+          var selectedCity = selectedProvince.child.find(it => it.name == this.selectedCitysName)
+            if(selectedCity) {
+              return selectedCity.child.map(it => it.name)
+            }
+        } 
+          return []
+      }, 
+    }
+  })
+  </script>
+</body>
+</html>

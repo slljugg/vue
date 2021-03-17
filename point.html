@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app-1">
+    <h1 v-if="ok">hello</h1>
+    <h1 v-else>aaa</h1> 
+   
+  </div>
+
+  <script src="vue.js"></script><!-- https://unpkg.com/vue -->
+  <script>
+    var app = new Vue ({
+      el: '#app-1',
+      data: {
+        ok:false,
+      }
+    })
+  </script>
+</body>
+</html>
+
+(   v-if     v-for
+  <li v-if="xxx" v-for="yyy"></li>
+  等价于函数
+    for(xxx) {
+      if(yyy)
+    }
+
+
+
+<template v-if="xxx" >
+  <li v-for="yyy"></li>
+</template>
+等价于函数
+  if(xxx) {
+    for(yyy)
+  }
+)
+
+
+用类似于Vue的方法将一个对象变成getter/setter。
+<script>
+  // 用函数将observe对象变换
+  function obrserve(obj) {
+    for(let prop in obj) {
+      let val = obj[prop]
+      if(typeof val == 'object') {
+        obrserve(val)
+      }
+        Object.defineProperty(obj,prop,{
+        get: function() {
+          console.log('getting property', prop)
+          return val
+        },
+        set: function(value) {
+          console.log('setting property', prop,'to', value )
+          if(typeof value == 'object') {
+            value = obrserve(value)
+          }
+          val = value
+        }
+      })
+    }
+    return obj
+  }
+  // obj对象
+  var obj = {
+    a:1,
+    b:2,
+    c:{
+      x:1,
+      y:2,
+    }
+  }
+
+  obrserve(obj)
+</script>
+
+
+
+
+

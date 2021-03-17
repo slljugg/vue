@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app-1">
+    <p @click="i++">{{msg}} - {{i}}</p>
+  </div>
+  <script src="vue.js"></script>
+  <script>
+  var data = {
+    msg:'hello world',
+    i:1,
+  }
+  var app = new Vue ({
+    el:'#app-1',
+    data: data,
+    beforeCreate() {
+      debugger
+    },
+    created() {
+      debugger
+    },
+    beforeMount() {
+      debugger
+    },
+    mounted() {
+      debugger
+    },
+    beforeUpdate() {
+      debugger
+    },
+    updated() {
+      debugger
+    },
+    beforeDestroy() {
+      debugger
+    },
+    destroyed() {
+      debugger
+    }
+  })
+  </script>
+</body>
+</html>
