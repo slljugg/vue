@@ -12,7 +12,7 @@
   </style>
 </head>
 <body>
-  <div id="todo-app">
+  <div id="todo-app"> 
     <h1>todos</h1>
     <p v-if="isSelect"> hlleo </p>
     <p v-else>no</p>
@@ -102,7 +102,7 @@
             this.editingIndex = -1
           } 
         },
-        changeTodo(e, todo) {
+        changeTodo(e,todo) {
           if(this.editingIndex == -1) {
             return 
           }

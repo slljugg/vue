@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .complated {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <div id="todo-app">
+    <div>
+      <input type="checkbox" @click="alltoggle" :checked="isAllcompleted">
+      <input type="text" @keyup="addtodo($event)">
+    </div>
+    <ul>
+      <li v-for="(todo,index) in showings" class="todo-item" :class="{complated:todo.done,active:!todo.done}">
+        <input type="checkbox" :checked="todo.done" @click="todo.done=!todo.done">
+        <span v-if="editingIndex != index" @dblclick="editingIndex = index">{{ todo.content }}</span>
+        <input type="text" v-if="editingIndex == index" :value="todo.content" @keyup="cancelEdit" @blur="changeTodo($event,todo)" @keyup.enter="changeTodo($event,todo)">
+        <button @click="delatetodo(index)">delate</button>
+      </li>
+    </ul>
+    <div>
+      <span>{{ count }} item{{ plural }} left</span>
+      <span>
+        <label><input type="radio" :checked="categary =='all'" @click="categary = 'all'">All</label>
+        <label><input type="radio" :checked="categary =='active'" @click="categary = 'active'">Active</label>
+        <label><input type="radio" :checked="categary =='complated'" @click="categary = 'complated'">Complated</label>
+      </span>
+      <button @click="clearshow" v-show="hasCompleted">clear</button>
+    </div>  
+  </div>
+  
+  <script src="vue.js"></script>
+  <script>
+    var app = new Vue({
+      el: '#todo-app',
+      data: {
+        categary: 'all',
+        editingIndex: -1,
+        todos:[{
+          content: 'eat',
+          done: false,
+        }, {
+          content: 'drink',
+          done: true,
+        }, {
+          content: 'sleep',
+          done: true,
+        }]
+      },
+      computed: {
+        count() {
+          return this.todos.filter(it => !it.done).length
+        },
+        plural() {
+          return this.count > 1 ? 's' : ''
+        },
+        showings() {
+          if(this.categary == 'all') {
+            return this.todos
+          }
+          if(this.categary == 'active') {
+            return this.todos.filter(it => !it.done)
+          }
+          if(this.categary =='complated') {
+            return this.todos.filter(it => it.done)
+          }
+        },
+        isAllcompleted() {
+          return this.todos.every(it => it.done)
+        },
+        hasCompleted() {
+          return this.todos.filter(it => it.done).length > 0
+        }
+      },
+      methods: {
+        addtodo(e) {
+          var text = e.target.value.trim()
+          if(text && e.keyCode == 13) {
+            this.todos.push({
+              content: text,
+              done: false,
+            })
+            e.target.value = ''
+          } else if (e.keyCode == 27) {
+            e.target.value = ''
+          }
+        },
+      cancelEdit(e) {
+        if(e.keyCode == 27) {
+          this.editingIndex = -1
+        }
+      },
+      changeTodo(e,todo) {
+        if(this.editingIndex == -1) {
+          return
+        }
+        todo.content = e.target.value
+        this.editingIndex = -1
+      },
+      delatetodo(index) {
+        this.todos.splice(index,1)
+      },
+      alltoggle() {
+        if(this.todos.every(it => it.done)) {
+          this.todos.forEach(it => it.done = false)
+        } else {
+          this.todos.forEach(it => it.done = true)
+        }
+      },
+      clearshow() {
+        this.todos = this.todos.filter(it => !it.done)
+      }
+
+      }
+    })
+  </script>
+</body>
+</html>
