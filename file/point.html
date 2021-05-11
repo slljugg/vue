@@ -46,6 +46,40 @@
 
 用类似于Vue的方法将一个对象变成getter/setter。
 <script>
+  function obrserve (obj) {
+    for(let prop in obj) {
+      let val = obj[prop]
+      if(typeof val == 'object') {
+        val = obrservse(val)
+      }
+      Object.defineProperty(obj,prop,{
+        get() {
+          console.log('getting prop',prop)
+          return val
+        },
+        set(value) {
+          if(typeof value == 'object') {
+            value = obrserve(value)
+          }
+          console.log('setting', prop, 'to', prop)
+          val = value
+        }
+      })
+    }
+    return obj
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   // 用函数将observe对象变换
   function obrserve(obj) {
     for(let prop in obj) {

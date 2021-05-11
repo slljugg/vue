@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <todo-app></todo-app>
+  </div>
+  <script src="vue.js"></script>
+  <script>
+    Vue.component('todo-app',{
+      template:`
+        <div>
+          <todo-input @new-input="addTodo" :todos="todos" @toggle-select-all="toggleSelectAll"></todo-input>
+          <todo-list @delete="deleteTodo" @toggle-state="toggleTodoState" :todos="todos"></todo-list>
+          <todo-footer></todo-footer>
+        </div>
+      `,
+      methods: {
+        deleteTodo(todo) {
+          this.todos = this.todos.filter(it => it != todo)
+        },
+        toggleTodoState(todo) {
+          todo.done = !todo.done
+        },
+        toggleSelectAll() {
+          if(this.todos.every(it => it.done)) {
+            this.todos.forEach(it => it.done = false)
+          } else {
+            this.todos.forEach(it => it.done = true)
+          }
+        },
+        addTodo(e) {
+          if(e.target.value.trim()) {
+            this.todos.push({
+              content:e.target.value.trim(),
+              done:false
+            })
+          }
+          e.target.value = ''
+        }
+      },
+      data() {
+        return {
+          todos:[
+            {content:'eat',done:true,name:'aa'},
+            {content:'drink',done:true,name:'bb'},
+            {content:'sleep',done:false,name:'cc'},
+          ]
+        }
+      }
+    })
+
+    Vue.component('todo-input',{
+      props:['todos'],
+      template:`
+        <div>
+          <input type="checkbox" @click=" $emit('toggle-select-all') " :checked="isAllCheck" />
+          <input type="text" @keyup.enter="$emit('new-input', $event)"/>
+        </div>
+      `,
+      computed: {
+        isAllCheck() {
+          return this.todos.every(it => it.done)
+        }
+      }
+    })
+    
+    Vue.component('todo-list',{
+      props:['todos'],
+      template:`
+        <ul>
+          <todo-item 
+          v-for="todo in todos" 
+          :todo="todo" 
+          :key="todo.name"
+          @delete="$emit('delete', todo)"
+          @toggle-state="$emit('toggle-state', todo)"
+          ></todo-item>
+        </ul>
+      `
+    })
+
+    Vue.component('todo-item', {
+      props:['todo'],
+      template:`
+        <li>
+          <input type="checkbox" :checked="todo.done" @click="$emit('toggle-state')"/>
+          <span>{{ todo.content }}</span>
+          <button @click="$emit('delete')">x</button> 
+        </li>
+      `
+    })
+
+    Vue.component('todo-footer',{
+      template:`
+        <span>footer</span>
+      `
+    })
+    var app = new Vue({
+      el:'#app',
+      data: {
+
+      }
+    })
+  </script>
+</body>
+</html>

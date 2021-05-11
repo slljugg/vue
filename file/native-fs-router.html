@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <a href="#/home">home</a>
+    <a href="#/about">home</a>
+    <a href="#/products">home</a>
+    <main></main>
+  </div>
+  <script type="text/x-template" id="/home">
+    <div>
+      <h1>{{ vote.info.title }}</h1>
+      <h3>{{ vote.info.desc }}</h3>
+      <ul class="options">
+        <li style="cursor:pointer" @click="voteup(option.id)" v-for="option in vote.options">
+          {{ option.content }} - {{ summary[option.id].length }}票 
+          <div class="ratio" style="height:3px;background-color: red;" :style="{width:ratioSummary[option.id] * 100 + '%'}"></div>
+        </li>
+      </ul>
+    </div>
+  </script>
+  <script type="text/x-template" id="/about">
+    about
+  </script>
+  <script type="text/x-template" id="/products">
+    <div>
+      <h2>创建投票</h2>
+      <div><input type="text" placeholder="标题" v-model="voteInfo.title"></div>
+      <div><input type="text" placeholder="问题描述" v-model="voteInfo.desc"></div>
+      <div v-for="(option,idx) in voteInfo.options">
+        <input type="text" :placeholder="'选择' + (idx + 1)" v-model="voteInfo.options[idx]" >
+        <button @click="voteInfo.options.splice(idx,1)">-</button>
+      </div>
+      <button @click="voteInfo.options.push('')">添加选项</button>
+      <div><input type="datetime-local" v-model="voteInfo.deadline"></div>
+      <div>
+        <label><input type="radio" value="1" v-model="voteInfo.anonymouse">实名</label>
+        <label><input type="radio" value="0" v-model="voteInfo.anonymouse">匿名</label>
+      </div>
+      <div>
+        <select v-model="voteInfo.singleSelection">
+          <option value="1">单选</option>
+          <option value="0">多选</option>
+        </select>
+      </div>
+      <button @click="submit">提交</button>
+    </div>
+  </script>
+  <script>
+    window.onhashchange = function() {
+      var pageUrl = location.hash.slice(1)
+      var pageHtml = document.getElementById(pageUrl).textContent
+      document.querySelector('main').innerHTML = pageHtml
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html, body, #app {
+      margin: 0;
+      height: 100%;
+    }
+    .container > div {
+      width: 25%;
+      text-align: center;
+    }
+    h1 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" >
+    <router-view></router-view>
+  </div>
+  <script src="vue.js"></script>
+  <script src="vue-router.js"></script>
+  <script>
+    var Home = {
+      template:`
+        <div style="display:flex; flex-flow:column; height:100%;">
+          <main style="flex-grow:1">
+            <router-view></router-view>
+          </main>
+          <div class="container" style="display:flex">
+            <div><router-link to="/home/wechat">微信</router-link></div>
+            <div><router-link to="/home/contacts">通讯录</router-link></div>
+            <div><router-link to="/home/discover">发现</router-link></div>
+            <div><router-link to="/home/me">我的</router-link></div>
+          </div>
+        </div>
+      `
+    }
+    var Wechat = {
+      template:`
+        <div>
+          <h1>微信</h1>
+          <ul>
+            <li><router-link to="/chat/123">123</router-link></li>
+            <li><router-link to="/chat/456">456</router-link></li>
+            <li><router-link to="/chat/111">111</router-link></li>
+          </ul>
+        </div>
+      `
+    }
+    var Discover = {
+      template:`
+        <div>
+          <h1>发现</h1>
+          <ul>
+            <li><router-link to="/friend-circle">朋友圈</router-link></li>
+            <li><router-link to="/see-around">看一看</router-link></li>
+          </ul>
+        </div>
+      `
+    }
+    var Contacts = {
+      template:`
+        <div>
+          <h1>通讯录</h1>
+          <ul>
+            <li><router-link to="/profile/111">111</router-link></li>
+            <li><router-link to="/profile/222">222</router-link></li>
+            <li><router-link to="/profile/333">333</router-link></li>
+          </ul>
+        </div>
+      `
+    }
+    var Me = {
+      template:`
+        <div>
+          <h1>我的</h1>
+          <ul>
+            <li><router-link to="/zone">我的</router-link></li>
+          </ul>
+        </div>
+      `
+    }
+    var friendCircle = {
+      template:`<div>我的朋友圈</div>`
+    }
+    var seeAround = {
+      template:`<div>看一看</div>`
+    }
+    var Chat = {
+      template:`
+      <div>
+        <button @click="back">返回</button>
+        <div style="display:flex; position:relative">
+          <div>正在和{{ $route.params.id }}聊天</div>
+          <div style="position:absolute; right:0"><router-link :to="'/profile/' + $route.params.id">查看个人信息</router-link></div>
+        </div>
+      </div>
+      `,
+      methods: {
+        back() {
+          this.$router.go(-1)
+        }
+      }
+    }
+    var Profile = {
+      template:`
+        <div>
+          <button @click="back">返回</button>
+          <div>正在查看{{ $route.params.id }}的详细信息</div>
+          <div><router-link :to="'/chat/' + $route.params.id">和他聊天</div>
+        </div>
+      `,
+      methods: {
+        back() {
+          this.$router.go(-1)
+        }
+      }
+    }
+    var router = new VueRouter({
+      routes:[{
+        path:'/',
+        redirect:'/home',
+      },{
+        path:'/home',
+        redirect:'/home/wechat'
+      },{
+        path:'/home',
+        component: Home,
+        children:[{
+          path:'wechat',
+          component: Wechat,
+        },{
+          path:'contacts',
+          component:Contacts
+        },{
+          path:'discover',
+          component: Discover
+        },{
+          path:'me',
+          component: Me
+        }]
+      },{
+        path:'/friend-circle',
+        component:friendCircle
+      },{
+        path:'/see-around',
+        component:seeAround
+      },{
+        path:'/chat/:id',
+        component: Chat
+      },{
+        path:'/profile/:id',
+        component:Profile
+      }]
+    })
+
+    var app = new Vue({
+      router:router,
+      el:'#app',
+    })
+  </script>
+</body>
+</html>

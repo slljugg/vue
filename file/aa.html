@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>随笔</title>
+  <style>
+    body {
+      font-size: consolas;
+    }
+    .show {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <json :value="data3"></json>
+  </div>
+  <script src="vue.js"></script>
+  <script type="text/x-template" id="json-template">
+    <span v-if="typeof value == 'number'">{{ value }}</span>
+        <span v-else-if="typeof value == 'boolean'">{{ value }}</span>
+        <span v-else-if="typeof value == 'string'">"{{ value }}"</span>
+        <span v-else-if=" value == null ">null</span>
+        <span v-else-if="Array.isArray(value)"><span class="show" @click ="show = !show">{{ show ? '-' : '+'}}</span>[
+            <div v-show ="show" style="margin-left:1em;"> 
+              <div v-for="(val,idx) of value"><json :value="val"></json><span v-if="idx < length - 1">,</span></div>
+            </div>
+            <span v-show="!show">...</span>
+          ]</span>
+
+        <span v-else-if="typeof value == 'object'"><span class="show" @click ="show = !show">{{ show ? '-' : '+'}}</span>{
+            <div v-show ="show" style="margin-left:1em;">  
+              <div v-for="(val, key, idx) of value">
+                {{ key }}: <json :value="val"></json><span v-if="idx < length - 1">,</span>
+              </div>
+            </div>
+            <span v-show="!show">...</span>
+          }</span>
+  </script>
+  <script>
+    Vue.component('json', {
+      props: ['value'],
+      template:'#json-template',  //相当于把上面的代码写进template
+    data() {
+      return {
+        length:Object.keys(this.value).length,
+        show:true
+      }
+    }
+    })
+    var app = new Vue({
+      el:'#app',
+      data: {
+        data3:{
+          a:1,
+          b:true,
+          c:"foo",
+          d:[
+            1,2,{
+              x:1,
+              y:2
+            }
+          ]
+        },
+        data2: [1,2,3,4,5],
+        data: {
+          a:1,
+          b:"foo",
+          c:true,
+          d:null
+        }
+      },
+    })
+  </script>
+</body>
+</html>

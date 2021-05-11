@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <div style="border:2px solid;">
+      <router-link to="/home">首页</router-link>
+      <router-link to="/orders">订单</router-link>
+      <router-link to="/inventory">库存</router-link>
+    </div>
+    <div style="border:2px solid; height: 400px;">
+      <router-view></router-view>
+    </div>
+  </div>
+  <script src="/vue.js"></script>
+  <script src="/vue-router.js"></script>
+  <script>
+    var Home = {
+      template:`
+        <h1>首页</h1>
+      `
+    }
+
+    var Orders = {
+      template:`
+        <div style="display: flex;height: 100%">
+          <aside style="width: 80px; border-right:2px solid;" >
+            <router-link style="display: block" to="/orders/paid">已支付</router-link>
+            <router-link style="display: block" to="/orders/ordered">未支付</router-link>
+            <router-link style="display: block" to="/orders/completed">已完成</router-link>
+          </aside>
+          <main style="width: 100%;">
+            <router-view></router-view>
+          </main>
+        </div> 
+      `
+    }
+
+    var Inventory = {
+      template:`
+        <div style="display: flex;height: 100%">
+          <aside style="width:80px; border-right:2px solid;" >
+            <router-link style="display: block" to="/inventory/man">男装</router-link>
+            <router-link style="display: block" to="/inventory/woman">女装</router-link>
+          </aside>
+          <main style="width: 100%;">
+            <router-view name="main"></router-view>
+            <router-view name="help"></router-view>
+          </main>
+        </div> 
+      `
+    }
+
+    var Paid = {
+      template:`
+        <div style="display:flex; height:100%">
+          <aside style="width:80px; border-right:2px solid;" >
+            <router-link style="display: block" to="/orders/paid/nosend">未发货</router-link>
+            <router-link style="display: block" to="/orders/paid/send">已发货</router-link>
+          </aside>
+          <main style="width: 100%;">
+            <router-view></router-view>
+          </main>
+        </div>
+      `
+    }
+
+    var router = new VueRouter({
+    base:'/new-product/new-vote',
+    mode:'history',
+    routes: [{
+      path: '/',
+      component:Home,
+    },{
+      path: '/home',
+      component: Home,
+    },{
+      path: '/orders',
+      component: Orders,
+      children: [{
+        path: '/',
+        redirect: 'paid'
+      },{
+        path: 'paid',
+        component: Paid,
+        children: [{
+          path: '/',
+          redirect: 'nosend'
+        },{
+          path: 'nosend',
+          component: {
+            template:`
+              <div>未发货物件</div>
+            `
+          }
+        },{
+          path:'send',
+          component: {
+            template:`
+              <div>已经发货物件</div>
+            `
+          }
+        }]
+      },{
+        path: 'ordered',
+        component: {
+          template:`
+            <div>未支付订单</div>
+          `
+        }
+      },{
+        path: 'completed',
+        component: {
+          template:`
+            <div>已完成订单</div>
+          `
+        }
+      }]
+    },{
+      path:'/inventory',
+      component: Inventory,
+      children:[{
+        path:'/',
+        redirect:'man'
+      },{
+        path: 'man',
+        components: {
+          main: {template:`<div style="height:50%">男装</div>`},
+          help: {template:`<div style="height:50%">男装帮助</div>`},
+        }
+      },{
+        path: 'woman',
+        components: {
+          main: {template:`<div style="height:50%">女装</div>`},
+        }
+      }]
+    }]
+  })
+    
+    var app = new Vue({
+      
+      router: router,
+      el:'#app',
+      data: {
+      
+      }
+    })
+  </script>
+  
+</body>
+</html>

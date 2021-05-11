@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <button @click="show = !show">{{'dddd' | uppercase}}</button>
+    <input v-if="show" v-focus />
+    <input type="text" v-datepicker />
+    <datepicker></datepicker>
+    <slider></slider>
+    <div v-slider></div>
+    <div style="width:200px;height:50px;overflow:scroll;" v-scrollops='x'>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, culpa totam tenetur, doloribus eos consequuntur animi ratione accusamus doloremque, vero incidunt ab sequi quod rerum delectus at. Cum, quam atque.
+    </div>
+  </div>
+  <script src="vue.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    Vue.filter('uppercase',function(input) {
+      return input.toUpperCase()
+    })
+    Vue.component('slider', {
+      template:'<div ref="el"></div>',
+      mounted() {
+        $(this.$refs.el).slider()
+      }
+    })
+    Vue.component('datepicker', {
+      template: `
+        <input ref="box" type="text" />
+      `,
+      mounted() {
+        $(this.$refs.box).datepicker()
+      }
+    })
+    Vue.directive('focus',{
+      bind() {
+
+      },
+      inserted (app) {
+        app.focus()
+      },
+    })
+    Vue.directive('datepicker',{
+      bind(app) {
+        $(app).datepicker()
+      }
+    })
+    Vue.directive('slider', {
+      bind(att) {
+        $(att).slider()
+      }
+    })
+    Vue.directive('scrollops', {
+      update(el, binding) {
+        el.scrollTop = binding.value
+      }
+    })
+    var app = new Vue({
+      el:'#app',
+      data: {
+        x:0,
+        show:true
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <todo-app></todo-app>
+  </div>
+  <script src="vue.js"></script>
+  <script src="vuex.js"></script>
+  <script>
+    var store = new Vuex.Store({
+      state: {
+        todos:[
+          {content:'eat',done:true,name:'aa'},
+          {content:'drink',done:true,name:'bb'},
+          {content:'sleep',done:false,name:'cc'},
+        ]
+      },
+      mutations: {
+        addTodo(state,e) {
+          if(e.target.value.trim()) {
+            state.todos.push({
+              content:e.target.value.trim(),
+              done:false
+            })
+          }
+          e.target.value=''
+        },
+        deleteTodo(state,todo) {
+          state.todos = state.todos.filter(it => it != todo)
+        },
+        toggleTodoState(state,todo) {
+          todo.done = !todo.done
+        },
+        toggleSelectAll(state) {
+          if(state.todos.every(it => it.done)) {
+            state.todos.forEach(it => it.done = false)
+          } else {
+            state.todos.forEach(it => it.done = true)
+          }
+        },
+      }
+    })
+    Vue.component('todo-app',{
+      template:`
+        <div>
+          <todo-input></todo-input>
+          <todo-list></todo-list>
+          <todo-footer></todo-footer>
+        </div>
+      `,
+      data() {
+        return {
+        }
+      }
+    })
+
+    Vue.component('todo-input',{
+      template:`
+        <div>
+          <input type="checkbox" @click="toggleSelectAll" :checked="todos.every(it => it.done)" />
+          <input type="text" @keyup.enter="addTodo" />
+        </div>
+      `,
+      computed: {
+        todos() {
+          return store.state.todos
+        }
+      },
+      methods: {
+        toggleSelectAll() {
+          store.commit('toggleSelectAll')
+        },
+        addTodo(e) {
+          store.commit('addTodo',e)
+        }
+      }
+    })
+    
+    Vue.component('todo-list',{
+      template:`
+        <ul>
+          <todo-item 
+          v-for="todo in todos" 
+          :todo="todo" 
+          :key="todo.name"
+          ></todo-item>
+        </ul>
+      `,
+      computed: {
+        todos() {
+          return store.state.todos
+        }
+      }
+    })
+
+    Vue.component('todo-item', {
+      props:['todo'],
+      template:`
+        <li>
+          <input type="checkbox" :checked="todo.done" @click="toggleState"/>
+          <span>{{ todo.content }}</span>
+          <button @click="deleteTodo">x</button> 
+        </li>
+      `,
+      methods: {
+        toggleState() {
+          store.commit('toggleTodoState',this.todo)
+        },
+        deleteTodo() {
+          store.commit('deleteTodo',this.todo)
+        }
+      }
+    })
+
+    Vue.component('todo-footer',{
+      template:`
+        <span>footer</span>
+      `
+    })
+    
+    var app = new Vue({
+      el:'#app',
+      store,
+      data: {
+
+      }
+    })
+  </script>
+</body>
+</html>
